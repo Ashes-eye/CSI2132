@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+   <meta charset="UTF-8"> 
+   <title> Booking</title>
+   <link rel="icon" href="hotel.jpg" type="image/x-icon">
+   <link rel="stylesheet" href="style.css" >
+   <script src="script.js"></script>
+  
+</head>
+
+
+<body> 
+
+
+<h1>   Booking page </h1>
+<form action="https://httpbin.org/get" method="get">
+  
+    <p> 
+       <label for="location"> Location :</label> 
+        <input type="text" name="location" id="location" list="location-list" required>
+        <datalist id="location-list">
+            <option value="Montreal"></option>
+            <option value="Ottawa"></option>
+            <option value="Toronto"></option>
+            <option value="vancouver"></option>
+            <option value="New-york"></option>
+            <option value="Boston"></option>
+
+        </datalist>
+    
+    </p> 
+    <p> 
+        <label for="capacity"> Room capacity :</label> 
+         <input type="text" name="capacity" id="capacity" list="capacity-list" required>
+         <datalist id="capacity-list">
+             <option value="Double room"></option>
+             <option value="Single room"></option>
+             <option value="suite"></option>
+            
+ 
+         </datalist>
+     
+     </p> 
+    <p>
+        <label for="stars"> star number: </label>
+        <input type="number" name="stars" id="stars" min="1" max="5" value="3" required>
+    </p>
+    <p>
+        <label for="Check-in"> check-in: </label>
+        <input type="date" name="Check-in" id="Check-in" required>
+    </p>
+    <p>
+        <label for="check-out"> check-out: </label>
+        <input type="date" name="check-out" id="check-out" required>
+    </p>
+    <p> 
+        <label for="View"> Room view :</label> 
+         <input type="text" name="View" id="View" list="View-list" required>
+         <datalist id="View-list">
+             <option value="Mountain View"></option>
+             <option value="Sea View"></option>
+         </datalist>
+     </p> 
+     <p> 
+        <label for="HotelChain"> Hotel chain :</label> 
+         <input type="text" name="HotelChain" id="HotelChain" list="HotelChain-list" required>
+         <datalist id="HotelChain-list">
+            <option value="HotelChain 1"></option>
+            <option value="HotelChain 2"></option>
+            <option value="HotelChain 3"></option>
+            <option value="HotelChain 4"></option>
+            <option value="HotelChain 5"></option>
+         </datalist>
+     </p> 
+     <button type="submit">Search </button>
+     <button type="reset">reset </button>
+    </form>
+    <button onclick="fetchGreeting()">Get Greeting</button>
+    <p id="response"></p>
+    
+</body>
+
+
+</html>
