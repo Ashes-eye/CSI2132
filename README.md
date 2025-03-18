@@ -2,7 +2,7 @@
 
 The e-Hotel Booking System is a web application that allows users to book hotels, manage reservations, and handle employee authentication. It is built using:
 
-Frontend: React / HTML & JavaScript
+Frontend: HTML 
 
 Backend: Spring Boot (Java) with PostgreSQL
 
