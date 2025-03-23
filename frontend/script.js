@@ -1,4 +1,4 @@
-// ✅ Function to fetch greeting from backend
+//  Function to fetch greeting from backend
 function fetchGreeting() {
     fetch('http://localhost:8080/api/hotels/greeting')
         .then(response => {
@@ -13,7 +13,7 @@ function fetchGreeting() {
         .catch(error => console.error('Error:', error));
 }
 
-// ✅ Function to fetch hotels (Example for another page)
+//  Function to fetch hotels (Example for another page)
 function fetchHotels() {
     fetch('http://localhost:8080/api/hotels/list')
         .then(response => response.json())
