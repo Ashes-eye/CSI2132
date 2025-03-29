@@ -2,6 +2,9 @@ package com.example.e_hotel.controller;
 
 import com.example.e_hotel.model.Customer;
 import com.example.e_hotel.repository.CustomerRepository;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +31,17 @@ public class CustomerController {
         return customerRepository.findById(id);
     }
 
+    @GetMapping("/login")
+    public ResponseEntity<Customer> loginByName(@RequestParam String name) {
+        List<Customer> customers = customerRepository.findAll();
+        for (Customer c : customers) {
+            if (c.getFullName().equalsIgnoreCase(name)) {
+                return ResponseEntity.ok(c);
+        }
+    }
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+}
+
     @PostMapping
     public Customer createCustomer(@RequestBody Customer customer) {
         return customerRepository.save(customer);
@@ -38,6 +52,8 @@ public class CustomerController {
         updatedCustomer.setCustomerID(id);
         return customerRepository.save(updatedCustomer);
     }
+
+
 
     @DeleteMapping("/{id}")
     public void deleteCustomer(@PathVariable int id) {

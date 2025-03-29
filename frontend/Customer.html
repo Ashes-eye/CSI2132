@@ -15,12 +15,12 @@
 <body> 
 
 
-<h1>   Welcome Customer</h1>
+<h1>   Welcome, Customer</h1>
 
 
 <fieldset> 
 <legend>
-   Login page
+   Login
 </legend>
 <p>
    <label for="email"> email   </label>
@@ -31,9 +31,20 @@
    <input type="password"  id="password" required>
 </p>
 </fieldset>
-<button type="submit">login</button>
-<button onclick="fetchGreeting()">Get Greeting</button>
-    <p id="response"></p>
+<button onclick="loginCustomer()">Login</button>
+  <button onclick="fetchGreeting()">Get Greeting</button>
+
+  <p id="response"></p>
+
+  <button onclick="logout()">Logout</button>
+
+  <script>
+    function logout() {
+      sessionStorage.clear();
+      alert("You have been logged out.");
+      window.location.href = "login.html";
+    }
+  </script>
     
 
 </body>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Employee - Direct Rent</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    function rentRoom() {
+      const roomID = document.getElementById("roomID").value;
+      const customerID = document.getElementById("customerID").value;
+      const employeeID = document.getElementById("employeeID").value;
+      const checkInDate = document.getElementById("checkIn").value;
+      const checkOutDate = document.getElementById("checkOut").value;
+
+      if (!roomID || !customerID || !employeeID || !checkInDate || !checkOutDate) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      fetch("http://localhost:8080/api/rentings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          roomID,
+          customerID,
+          employeeID,
+          checkInDate,
+          checkOutDate
+        })
+      })
+      .then(res => {
+        if (res.ok) {
+          alert("Room successfully rented!");
+        } else {
+          alert("Renting failed.");
+        }
+      })
+      .catch(err => console.error("Error:", err));
+    }
+  </script>
+</head>
+<body>
+  <h1>Employee Direct Room Rent</h1>
+  <form onsubmit="event.preventDefault(); rentRoom();">
+    <p>
+      <label for="roomID">Room ID:</label>
+      <input type="number" id="roomID" required>
+    </p>
+    <p>
+      <label for="customerID">Customer ID:</label>
+      <input type="number" id="customerID" required>
+    </p>
+    <p>
+      <label for="employeeID">Employee ID:</label>
+      <input type="number" id="employeeID" required>
+    </p>
+    <p>
+      <label for="checkIn">Check-in Date:</label>
+      <input type="date" id="checkIn" required>
+    </p>
+    <p>
+      <label for="checkOut">Check-out Date:</label>
+      <input type="date" id="checkOut" required>
+    </p>
+    <button type="submit">Submit Rent</button>
+  </form>
+</body>
+</html>

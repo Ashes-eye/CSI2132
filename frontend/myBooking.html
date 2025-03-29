@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Bookings</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const customerID = sessionStorage.getItem("customerID");
+            if (!customerID) {
+                alert("You must log in first!");
+                window.location.href = "customer.html";
+                return;
+            }
+
+            document.getElementById("customer-id").textContent = customerID;
+
+            fetch(`http://localhost:8080/api/bookings/customer/${customerID}`)
+                .then(response => response.json())
+                .then(data => displayBookings(data))
+                .catch(error => console.error("Error fetching bookings:", error));
+        });
+
+        function displayBookings(bookings) {
+            const list = document.getElementById("booking-list");
+            list.innerHTML = "";
+
+            if (bookings.length === 0) {
+                list.innerHTML = "<li>No bookings found.</li>";
+                return;
+            }
+
+            bookings.forEach(booking => {
+                const li = document.createElement("li");
+                li.innerHTML = `
+                    Booking ID: ${booking.bookingID}<br>
+                    Room ID: ${booking.roomID}<br>
+                    Check-in: ${booking.checkInDate}<br>
+                    Check-out: ${booking.checkOutDate}<br>
+                    <hr>
+                `;
+                list.appendChild(li);
+            });
+        }
+
+        function logout() {
+            sessionStorage.clear();
+            alert("You have been logged out.");
+            window.location.href = "login.html";
+        }
+    </script>
+</head>
+<body>
+    <h1>My Bookings</h1>
+    <p>Logged in as Customer ID: <span id="customer-id"></span></p>
+
+    <ul id="booking-list"></ul>
+
+    <button onclick="logout()">Logout</button>
+</body>
+</html>

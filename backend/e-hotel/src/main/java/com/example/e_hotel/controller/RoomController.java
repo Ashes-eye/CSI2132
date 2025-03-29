@@ -1,7 +1,8 @@
-package com.example.e_hotel.controllerRoom;
+package com.example.e_hotel.controller;
 
-import com.example.e_hotel.modelRoom.Room;
-import com.example.e_hotel.repositoryRoom.RoomRepository;
+import com.example.e_hotel.model.Room;
+import com.example.e_hotel.repository.RoomRepository;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

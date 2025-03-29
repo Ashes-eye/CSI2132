@@ -21,63 +21,53 @@ public class BookingController {
 
     public BookingController(BookingRepository bookingRepository, RentingRepository rentingRepository) {
         this.bookingRepository = bookingRepository;
-        this.rentingRepository= rentingRepository;
+        this.rentingRepository = rentingRepository;
     }
 
+    // Get all bookings
     @GetMapping
     public List<Booking> getAllBookings() {
         return bookingRepository.findAll();
     }
 
+    // Get booking by ID
     @GetMapping("/{id}")
     public Optional<Booking> getBookingById(@PathVariable int id) {
         return bookingRepository.findById(id);
     }
 
+    // Get bookings for a specific customer
+    @GetMapping("/customer/{customerID}")
+    public List<Booking> getBookingsByCustomerID(@PathVariable int customerID) {
+        return bookingRepository.findByCustomerID(customerID);
+    }
+
+    // Create a new booking
     @PostMapping
     public Booking createBooking(@RequestBody Booking booking) {
         return bookingRepository.save(booking);
     }
 
+    // Update an existing booking
     @PutMapping("/{id}")
     public Booking updateBooking(@PathVariable int id, @RequestBody Booking updatedBooking) {
         updatedBooking.setBookingID(id);
         return bookingRepository.save(updatedBooking);
     }
 
+    // Delete a booking
     @DeleteMapping("/{id}")
     public void deleteBooking(@PathVariable int id) {
         bookingRepository.deleteById(id);
     }
 
-    @PostMapping("/{id}/checkin")
-    public Renting checkInFromBooking(@PathVariable int id, @RequestBody CheckInRequest checkInRequest) {
-        Optional<Booking> bookingOpt = bookingRepository.findById(id);
-        if (bookingOpt.isEmpty()) {
-            throw new RuntimeException("Booking not found with ID: " + id);
+    // Employee check-in: convert booking to renting
+    @PostMapping("/checkin")
+    public Renting checkInBooking(@RequestBody Renting renting) {
+        // Optionally you can delete or mark the booking as fulfilled
+        if (renting.getBookingID() != 0) {
+            bookingRepository.deleteById(renting.getBookingID());
         }
-
-        Booking booking = bookingOpt.get();
-
-        Renting renting = new Renting();
-        renting.setCustomerID(booking.getCustomerID());
-        renting.setRoomID(booking.getRoomID());
-        renting.setEmployeeID(checkInRequest.getEmployeeID());
-        renting.setPaymentAmount(checkInRequest.getPaymentAmount());
-
-        renting.setCheckInDate(checkInRequest.getCheckInDate() != null ?
-                checkInRequest.getCheckInDate() : booking.getCheckInDate());
-
-        renting.setCheckOutDate(checkInRequest.getCheckOutDate() != null ?
-                checkInRequest.getCheckOutDate() : booking.getCheckOutDate());
-
-        Renting savedRenting = rentingRepository.save(renting);
-
-        // remove booking after check-in
-        bookingRepository.deleteById(id);
-
-        return savedRenting;
+        return rentingRepository.save(renting);
     }
-
-    
 }

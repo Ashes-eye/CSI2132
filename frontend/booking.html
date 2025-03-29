@@ -78,6 +78,7 @@
      <button type="submit">Search </button>
      <button type="reset">reset </button>
     </form>
+
     <button onclick="fetchGreeting()">Get Greeting</button>
     <p id="response"></p>
 
@@ -85,7 +86,28 @@
         <h2>Available Rooms</h2>
         <ul id="room-list"></ul>
     </div>
-      
+
+    <script>
+        // Show logged in customer ID
+        const customerId = sessionStorage.getItem("customerID");
+        if (!customerId) {
+            alert("You must log in first!");
+            window.location.href = "customer.html";
+        } else {
+            document.getElementById("customer-id-display").textContent = customerId;
+        }
+    </script>
+    
+    <button onclick="logout()">Logout</button>
+    
+    <script>
+    function logout() {
+        sessionStorage.clear();
+        alert("You have been logged out.");
+        window.location.href = "login.html"; // redirect to login selector
+}
+</script>
+
     
 </body>
 

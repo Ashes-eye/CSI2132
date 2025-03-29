@@ -18,6 +18,8 @@ public class Renting {
     private LocalDate checkOutDate;
     private double paymentAmount;
 
+    private Integer bookingID;
+
     public int getRentingID() { 
         return rentingID; 
     }
@@ -59,5 +61,11 @@ public class Renting {
     }
     public void setPaymentAmount(double paymentAmount) { 
         this.paymentAmount = paymentAmount; 
+    }
+    public Integer getBookingID() {
+        return bookingID;
+    }
+    public void setBookingID(Integer bookingID) {
+        this.bookingID = bookingID;
     }
 }

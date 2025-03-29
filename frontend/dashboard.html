@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>e-Hotel Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    function logout() {
+      sessionStorage.clear();
+      alert("You have been logged out.");
+      window.location.href = "login.html";
+    }
+  </script>
+</head>
+<body>
+  <h1>e-Hotel Dashboard</h1>
+  <ul>
+    <li><a href="booking.html">Book a Room</a></li>
+    <li><a href="mybooking.html">My Bookings</a></li>
+    <li><a href="employee_checkin.html">Employee Check-In</a></li>
+    <li><a href="employee_rent.html">Employee Direct Rent</a></li>
+    <li><a href="view_available_rooms.html">View: Available Rooms Per Area</a></li>
+    <li><a href="view_capacity.html">View: Capacity Per Hotel</a></li>
+  </ul>
+
+  <br>
+  <button onclick="logout()">Logout</button>
+
+</body>
+</html>

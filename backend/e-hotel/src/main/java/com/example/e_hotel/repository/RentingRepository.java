@@ -8,3 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface RentingRepository extends JpaRepository<Renting, Integer> {
 }
 
+
+
