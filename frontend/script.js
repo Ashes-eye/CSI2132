@@ -139,10 +139,16 @@ function loginCustomer() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    const customerID = sessionStorage.getItem("customerID");
-    if (!customerID) {
-        alert("You must log in first!");
-        window.location.href = "customer.html";
+    const protectedPages = ["booking.html", "mybooking.html", "dashboard.html"];
+    const currentPage = window.location.pathname.split("/").pop();
+
+    if (protectedPages.includes(currentPage)) {
+        const customerID = sessionStorage.getItem("customerID");
+        if (!customerID) {
+            alert("You must log in first!");
+            window.location.href = "customer.html";
+        }
     }
 });
+
 
