@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$USER_HOME$/Downloads/InsertData.sql" dialect="PostgreSQL" />
+    <file url="file://$USER_HOME$/Downloads/Renting_fixed.sql" dialect="PostgreSQL" />
+    <file url="file://$USER_HOME$/Downloads/Room (1).sql" dialect="PostgreSQL" />
+    <file url="PROJECT" dialect="PostgreSQL" />
+  </component>
+</project>
