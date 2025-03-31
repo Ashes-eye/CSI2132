@@ -3,59 +3,115 @@ package com.example.e_hotel.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Room")
+@Table(name = "room")
 public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int roomID;
-    private int hotelID;
-    private double price;
-    private int capacity;
-    private String view;
-    private boolean extendable;
-    private String damages;
+    @Column(name ="roomid",nullable = false)
+    private Integer roomId;
 
-    public int getRoomID(){
-        return roomID;
+    @Column(name ="hotelid",nullable = false)
+    private Integer hotelId;
+
+    @Column(nullable = false)
+    private double price;
+
+    @Column(nullable = false)
+    private int capacity;
+
+    @Column
+    private String amenities; // e.g. "WiFi, TV, Mini-bar"
+
+    @Column(name ="seaview")
+    private boolean seaView;
+
+    @Column(name ="mountainview")
+    private boolean mountainView;
+
+    @Column(name ="isextendable")
+    private boolean isExtendable;
+
+    @Column
+    private String problems; // e.g. "Leaky faucet"
+
+    // Constructors
+    public Room() {}
+
+    public Room(Integer hotelId, double price, int capacity, String amenities,
+                boolean seaView, boolean mountainView, boolean isExtendable, String problems) {
+        this.hotelId = hotelId;
+        this.price = price;
+        this.capacity = capacity;
+        this.amenities = amenities;
+        this.seaView = seaView;
+        this.mountainView = mountainView;
+        this.isExtendable = isExtendable;
+        this.problems = problems;
     }
-    public void setRoomID(int roomID){
-        this.roomID=roomID;
+
+    // Getters and Setters
+
+    public Integer getRoomId() {
+        return roomId;
     }
-    public int getHotelID(){
-        return hotelID;
+    public void setRoomId(Integer roomId) {
+        this.roomId = roomId;
     }
-    public void setHotelID(int hotelID){
-        this.hotelID=hotelID;
+
+    public Integer getHotelId() {
+        return hotelId;
     }
-    public double getPrice(){
+    public void setHotelId(Integer hotelId) {
+        this.hotelId = hotelId;
+    }
+
+    public double getPrice() {
         return price;
     }
-    public void setPrice(double price){
-        this.price=price;
+    public void setPrice(double price) {
+        this.price = price;
     }
-    public int getCapacity(){
+
+    public int getCapacity() {
         return capacity;
     }
-    public void setCapacity(int capacity){
-        this.capacity=capacity;
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
-    public String getView(){
-        return view; 
+
+    public String getAmenities() {
+        return amenities;
     }
-    public void setView(String view){
-        this.view = view; 
+    public void setAmenities(String amenities) {
+        this.amenities = amenities;
     }
-    public boolean isExtendable(){
-        return extendable;
+
+    public boolean isSeaView() {
+        return seaView;
     }
-    public void setExtendable(boolean extendable){
-        this.extendable = extendable; 
+    public void setSeaView(boolean seaView) {
+        this.seaView = seaView;
     }
-    public String getDamages(){
-        return damages; 
+
+    public boolean isMountainView() {
+        return mountainView;
     }
-    public void setDamages(String damages){
-        this.damages = damages; 
+    public void setMountainView(boolean mountainView) {
+        this.mountainView = mountainView;
+    }
+
+    public boolean isExtendable() {
+        return isExtendable;
+    }
+    public void setExtendable(boolean extendable) {
+        isExtendable = extendable;
+    }
+
+    public String getProblems() {
+        return problems;
+    }
+    public void setProblems(String problems) {
+        this.problems = problems;
     }
 }

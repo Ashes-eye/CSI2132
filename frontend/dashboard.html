@@ -1,30 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>e-Hotel Dashboard</title>
-  <link rel="stylesheet" href="style.css">
-  <script>
-    function logout() {
-      sessionStorage.clear();
-      alert("You have been logged out.");
-      window.location.href = "login.html";
-    }
-  </script>
+  <title>Dashboard</title>
 </head>
 <body>
-  <h1>e-Hotel Dashboard</h1>
-  <ul>
-    <li><a href="booking.html">Book a Room</a></li>
-    <li><a href="mybooking.html">My Bookings</a></li>
-    <li><a href="employee_checkin.html">Employee Check-In</a></li>
-    <li><a href="employee_rent.html">Employee Direct Rent</a></li>
-    <li><a href="view_available_rooms.html">View: Available Rooms Per Area</a></li>
-    <li><a href="view_capacity.html">View: Capacity Per Hotel</a></li>
-  </ul>
+<h1>e-Hotel Dashboard</h1>
+<div id="welcome"></div>
 
-  <br>
-  <button onclick="logout()">Logout</button>
+<ul id="nav"></ul>
 
+<script>
+  const customerId = sessionStorage.getItem('customerID');
+  const employeeId = sessionStorage.getItem('employeeID');
+
+  const welcomeDiv = document.getElementById('welcome');
+  const nav = document.getElementById('nav');
+
+  if (customerId) {
+    welcomeDiv.textContent = 'Welcome, Customer #' + customerId;
+    // show customer options
+    const bookingLink = document.createElement('li');
+    bookingLink.innerHTML = '<a href="booking.html">Search/Book Rooms</a>';
+    nav.appendChild(bookingLink);
+
+    const myBookingsLink = document.createElement('li');
+    myBookingsLink.innerHTML = '<a href="myBookings.html">My Bookings</a>';
+    nav.appendChild(myBookingsLink);
+
+  } else if (employeeId) {
+    welcomeDiv.textContent = 'Welcome, Employee #' + employeeId;
+    // show employee options
+    const checkInLink = document.createElement('li');
+    checkInLink.innerHTML = '<a href="employeeCheckin.html">Check-In Guests</a>';
+    nav.appendChild(checkInLink);
+
+    const manageRoomsLink = document.createElement('li');
+    manageRoomsLink.innerHTML = '<a href="manageRooms.html">Manage Rooms</a>';
+    nav.appendChild(manageRoomsLink);
+  } else {
+    // not logged in
+    alert('You are not logged in!');
+    window.location.href = 'login.html';
+  }
+</script>
+
+<button onclick="logout()">Logout</button>
+<script>
+  function logout() {
+    sessionStorage.clear();
+    window.location.href = 'login.html';
+  }
+</script>
 </body>
 </html>

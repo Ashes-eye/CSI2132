@@ -4,47 +4,91 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "Booking")
+@Table(name = "booking")
 public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int bookingID;
+    @Column(name = "bookingid", nullable = false)
+    private Integer bookingId;
 
-    private int customerID;
-    private int roomID;
-    private LocalDate checkInDate;
-    private LocalDate checkOutDate;
+    @Column(name = "customerid",nullable = false)
+    private Integer customerId;
 
-    public int getBookingID() { 
-        return bookingID; 
-    }
-    public void setBookingID(int bookingID) { 
-        this.bookingID = bookingID; 
-    }
-    public int getCustomerID() { 
-        return customerID; 
-    }
-    public void setCustomerID(int customerID) { 
-        this.customerID = customerID; 
-    }
-    public int getRoomID() { 
-        return roomID; 
-    }
-    public void setRoomID(int roomID) { 
-        this.roomID = roomID; 
-    }
-    public LocalDate getCheckInDate() { 
-        return checkInDate; 
-    }
-    public void setCheckInDate(LocalDate checkInDate) { 
-        this.checkInDate = checkInDate; 
+    @Column(name = "roomid",nullable = false)
+    private Integer roomId;
+
+    @Column(name="startdate",nullable = false)
+    private LocalDate startDate;
+
+    @Column(name = "enddate",nullable = false)
+    private LocalDate endDate;
+
+    @Column(nullable = false)
+    private String status; // e.g. "CONFIRMED", "CANCELLED", "PENDING"
+
+    @Column(name = "bookdate",nullable = false)
+    private LocalDate bookDate;
+
+    // Constructors
+    public Booking() {}
+
+    public Booking(Integer customerId, Integer roomId, LocalDate startDate, LocalDate endDate, String status, LocalDate bookDate) {
+        this.customerId = customerId;
+        this.roomId = roomId;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.status = status;
+        this.bookDate = bookDate;
     }
 
-    public LocalDate getCheckOutDate() { 
-        return checkOutDate; 
+    // Getters and Setters
+    public Integer getBookingId() {
+        return bookingId;
     }
-    public void setCheckOutDate(LocalDate checkOutDate) { 
-        this.checkOutDate = checkOutDate; 
+    public void setBookingId(Integer bookingId) {
+        this.bookingId = bookingId;
+    }
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
+    }
+
+    public Integer getRoomId() {
+        return roomId;
+    }
+    public void setRoomId(Integer roomId) {
+        this.roomId = roomId;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDate getBookDate() {
+        return bookDate;
+    }
+    public void setBookDate(LocalDate bookDate) {
+        this.bookDate = bookDate;
     }
 }

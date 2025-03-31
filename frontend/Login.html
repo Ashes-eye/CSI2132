@@ -1,29 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-
-
 <head>
-   <meta charset="UTF-8"> 
-   <title> Search for hotels</title>
-   <link rel="icon" href="hotel.jpg" type="image/x-icon">
-   <link rel="stylesheet" href="style.css" >
-   <script src="script.js"></script>
+    <meta charset="UTF-8">
+    <title>e-Hotel Login</title>
+    <link rel="stylesheet" href="LoginStyle.css">
+    <script src="script.js" defer></script>
 </head>
+<body>
 
+<h1>e-Hotel Login</h1>
 
-<body> 
+<fieldset>
+    <legend>Login</legend>
 
+    <label for="role">I am a:</label>
+    <select id="role">
+        <option value="customer">Customer</option>
+        <option value="employee">Employee</option>
+    </select>
 
-<h1>   Login page </h1>
-<ul> 
-    <li>   <a href="Employer.html"> Employer</a></li>
-    <li>   <a href="Customer.html"> Customer</a></li>
-    </ul>
-    <button onclick="fetchGreeting()">Get Greeting</button>
-    <p id="response"></p>
-    
+    <br><br>
+
+    <label for="email">Email:</label>
+    <input type="text" id="email" placeholder="your@email.com" required>
+
+    <br><br>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" required>
+
+    <br><br>
+
+    <button onclick="login()">Login</button>
+</fieldset>
+
+<p id="response"></p>
 
 </body>
-
-
 </html>

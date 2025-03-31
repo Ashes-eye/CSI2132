@@ -1,16 +1,18 @@
 package com.example.e_hotel.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
 
 @Entity
-@Table(name = "customer")
-public class Customer {
+@Table(name = "employee")
+public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "customerid", nullable = false)
-    private Integer customerId;
+    @Column(name="employeeid",nullable = false)
+    private Integer employeeId;
+
+    @Column(name ="hotelid",nullable = false)
+    private Integer hotelId;
 
     @Column(nullable = false)
     private String name;
@@ -18,31 +20,41 @@ public class Customer {
     @Column(nullable = false)
     private String address;
 
-    @Column(name ="registerdate",nullable = false)
-    private LocalDate registerDate;
+    @Column(nullable = true)
+    private String role;
 
     @Column(nullable = true)
     private String email;
 
     @Column(nullable = true)
     private String password;
-    // Constructors
-    public Customer() {}
 
-    public Customer(String name, String address, LocalDate registerDate, String email, String password) {
+    // Constructors
+    public Employee() {}
+
+    public Employee(Integer hotelId, String name, String address, String role, String email, String password) {
+        this.hotelId = hotelId;
         this.name = name;
         this.address = address;
-        this.registerDate = registerDate;
+        this.role = role;
         this.email = email;
         this.password = password;
     }
 
     // Getters/Setters
-    public Integer getCustomerId() {
-        return customerId;
+
+    public Integer getEmployeeId() {
+        return employeeId;
     }
-    public void setCustomerId(Integer customerId) {
-        this.customerId = customerId;
+    public void setEmployeeId(Integer employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    public Integer getHotelId() {
+        return hotelId;
+    }
+    public void setHotelId(Integer hotelId) {
+        this.hotelId = hotelId;
     }
 
     public String getName() {
@@ -59,17 +71,16 @@ public class Customer {
         this.address = address;
     }
 
-    public LocalDate getRegisterDate() {
-        return registerDate;
+    public String getRole() {
+        return role;
     }
-    public void setRegisterDate(LocalDate registerDate) {
-        this.registerDate = registerDate;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -77,7 +88,6 @@ public class Customer {
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }

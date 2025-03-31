@@ -1,58 +1,64 @@
 package com.example.e_hotel.controller;
 
+import com.example.e_hotel.exceptions.ResourceNotFoundException;
 import com.example.e_hotel.model.Room;
 import com.example.e_hotel.repository.RoomRepository;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/rooms")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/room")
+@CrossOrigin
 public class RoomController {
 
-    private final RoomRepository roomRepository;
+    @Autowired
+    private RoomRepository roomRepo;
 
-    public RoomController(RoomRepository roomRepository) {
-        this.roomRepository = roomRepository;
-    }
-
-    // GET all rooms
     @GetMapping
     public List<Room> getAllRooms() {
-        return roomRepository.findAll();
+        return roomRepo.findAll();
     }
 
-    // GET rooms by hotel ID
-    @GetMapping("/hotel/{hotelID}")
-    public List<Room> getRoomsByHotel(@PathVariable int hotelID) {
-        return roomRepository.findByHotelID(hotelID);
-    }
-
-    // GET a room by ID
     @GetMapping("/{id}")
-    public Optional<Room> getRoomById(@PathVariable int id) {
-        return roomRepository.findById(id);
+    public ResponseEntity<Room> getRoomById(@PathVariable Integer id) {
+        Room room = roomRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Room not found with ID " + id));
+        return ResponseEntity.ok(room);
     }
 
-    // POST (create) a new room
     @PostMapping
-    public Room createRoom(@RequestBody Room room) {
-        return roomRepository.save(room);
+    public ResponseEntity<Room> createRoom(@RequestBody Room room) {
+        Room saved = roomRepo.save(room);
+        return ResponseEntity.ok(saved);
     }
 
-    // PUT (update) a room
     @PutMapping("/{id}")
-    public Room updateRoom(@PathVariable int id, @RequestBody Room updatedRoom) {
-        updatedRoom.setRoomID(id);
-        return roomRepository.save(updatedRoom);
+    public ResponseEntity<Room> updateRoom(@PathVariable Integer id, @RequestBody Room data) {
+        Room existing = roomRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Room not found with ID " + id));
+
+        existing.setHotelId(data.getHotelId());
+        existing.setPrice(data.getPrice());
+        existing.setCapacity(data.getCapacity());
+        existing.setAmenities(data.getAmenities());
+        existing.setSeaView(data.isSeaView());
+        existing.setMountainView(data.isMountainView());
+        existing.setExtendable(data.isExtendable());
+        existing.setProblems(data.getProblems());
+
+        Room saved = roomRepo.save(existing);
+        return ResponseEntity.ok(saved);
     }
 
-    // DELETE a room
     @DeleteMapping("/{id}")
-    public void deleteRoom(@PathVariable int id) {
-        roomRepository.deleteById(id);
+    public ResponseEntity<?> deleteRoom(@PathVariable Integer id) {
+        if (!roomRepo.existsById(id)) {
+            throw new ResourceNotFoundException("Room not found with ID " + id);
+        }
+        roomRepo.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }

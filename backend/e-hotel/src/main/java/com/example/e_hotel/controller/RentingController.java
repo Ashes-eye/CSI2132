@@ -1,51 +1,83 @@
 package com.example.e_hotel.controller;
 
+import com.example.e_hotel.exceptions.ResourceNotFoundException;
+import com.example.e_hotel.model.Booking;
 import com.example.e_hotel.model.Renting;
+import com.example.e_hotel.model.Room;
+import com.example.e_hotel.repository.BookingRepository;
 import com.example.e_hotel.repository.RentingRepository;
+import com.example.e_hotel.repository.RoomRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.temporal.ChronoUnit;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/rentings")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/renting")
+@CrossOrigin
 public class RentingController {
 
-    private final RentingRepository rentingRepository;
+    @Autowired
+    private RentingRepository rentingRepo;
 
-    public RentingController(RentingRepository rentingRepository) {
-        this.rentingRepository = rentingRepository;
-    }
+    @Autowired
+    private BookingRepository bookingRepo;
 
-    // GET all rentings
+    @Autowired
+    private RoomRepository roomRepo;
+
     @GetMapping
     public List<Renting> getAllRentings() {
-        return rentingRepository.findAll();
+        return rentingRepo.findAll();
     }
 
-    // GET a renting by ID
+    @PostMapping("/checkin")
+    public ResponseEntity<?> checkIn(@RequestParam Integer bookingId) {
+        // Fetch booking
+        Booking booking = bookingRepo.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found with ID " + bookingId));
+
+        Room room = roomRepo.findById(booking.getRoomId())
+                .orElseThrow(() -> new ResourceNotFoundException("Room not found with ID " + booking.getRoomId()));
+
+        // Calculate payment
+        long days = ChronoUnit.DAYS.between(booking.getStartDate(), booking.getEndDate());
+        if (days <= 0) days = 1; // Ensure at least 1-day payment
+        double payment = days * room.getPrice();
+
+        // Create Renting
+        Renting rent = new Renting(
+                booking.getCustomerId(),
+                booking.getRoomId(),
+                booking.getStartDate(),
+                booking.getEndDate(),
+                payment
+        );
+
+        Renting savedRent = rentingRepo.save(rent);
+
+        // Delete booking
+        bookingRepo.deleteById(bookingId);
+
+        return ResponseEntity.ok(savedRent);
+    }
+
     @GetMapping("/{id}")
-    public Optional<Renting> getRentingById(@PathVariable int id) {
-        return rentingRepository.findById(id);
+    public ResponseEntity<Renting> getRenting(@PathVariable Integer id) {
+        Renting rent = rentingRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Renting not found with ID " + id));
+        return ResponseEntity.ok(rent);
     }
 
-    // POST create new renting (walk-in or from booking)
-    @PostMapping
-    public Renting createRenting(@RequestBody Renting renting) {
-        return rentingRepository.save(renting);
-    }
-
-    // PUT to update renting 
-    @PutMapping("/{id}")
-    public Renting updateRenting(@PathVariable int id, @RequestBody Renting updated) {
-        updated.setRentingID(id);
-        return rentingRepository.save(updated);
-    }
-
-    // DELETE renting record 
     @DeleteMapping("/{id}")
-    public void deleteRenting(@PathVariable int id) {
-        rentingRepository.deleteById(id);
+    public ResponseEntity<?> deleteRenting(@PathVariable Integer id) {
+        if (!rentingRepo.existsById(id)) {
+            throw new ResourceNotFoundException("Renting not found with ID " + id);
+        }
+        rentingRepo.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }

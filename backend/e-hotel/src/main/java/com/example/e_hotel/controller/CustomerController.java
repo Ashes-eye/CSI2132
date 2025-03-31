@@ -1,62 +1,59 @@
 package com.example.e_hotel.controller;
 
+import com.example.e_hotel.exceptions.ResourceNotFoundException;
 import com.example.e_hotel.model.Customer;
 import com.example.e_hotel.repository.CustomerRepository;
-
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/customers")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/customer")
+@CrossOrigin
 public class CustomerController {
 
-    private final CustomerRepository customerRepository;
-
-    public CustomerController(CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
-    }
+    @Autowired
+    private CustomerRepository customerRepo;
 
     @GetMapping
     public List<Customer> getAllCustomers() {
-        return customerRepository.findAll();
+        return customerRepo.findAll();
     }
 
     @GetMapping("/{id}")
-    public Optional<Customer> getCustomerById(@PathVariable int id) {
-        return customerRepository.findById(id);
+    public ResponseEntity<Customer> getCustomerById(@PathVariable Integer id) {
+        Customer c = customerRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with ID " + id));
+        return ResponseEntity.ok(c);
     }
-
-    @GetMapping("/login")
-    public ResponseEntity<Customer> loginByName(@RequestParam String name) {
-        List<Customer> customers = customerRepository.findAll();
-        for (Customer c : customers) {
-            if (c.getFullName().equalsIgnoreCase(name)) {
-                return ResponseEntity.ok(c);
-        }
-    }
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-}
 
     @PostMapping
-    public Customer createCustomer(@RequestBody Customer customer) {
-        return customerRepository.save(customer);
+    public ResponseEntity<Customer> createCustomer(@RequestBody Customer newCustomer) {
+        // Could do additional checks, e.g. ensure email is not taken
+        Customer saved = customerRepo.save(newCustomer);
+        return ResponseEntity.ok(saved);
     }
 
     @PutMapping("/{id}")
-    public Customer updateCustomer(@PathVariable int id, @RequestBody Customer updatedCustomer) {
-        updatedCustomer.setCustomerID(id);
-        return customerRepository.save(updatedCustomer);
+    public ResponseEntity<Customer> updateCustomer(@PathVariable Integer id, @RequestBody Customer updatedData) {
+        Customer existing = customerRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with ID " + id));
+        existing.setEmail(updatedData.getEmail());
+        existing.setPassword(updatedData.getPassword());
+        existing.setName(updatedData.getName());
+        // etc
+        Customer saved = customerRepo.save(existing);
+        return ResponseEntity.ok(saved);
     }
 
-
-
     @DeleteMapping("/{id}")
-    public void deleteCustomer(@PathVariable int id) {
-        customerRepository.deleteById(id);
+    public ResponseEntity<?> deleteCustomer(@PathVariable Integer id) {
+        try {
+            customerRepo.deleteById(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

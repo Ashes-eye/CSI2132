@@ -1,10 +1,8 @@
-//  Function to fetch greeting from backend
+// Fetch greeting
 function fetchGreeting() {
     fetch('http://localhost:8080/api/hotels/greeting')
         .then(response => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
+            if (!response.ok) throw new Error("Network response was not ok");
             return response.text();
         })
         .then(data => {
@@ -13,9 +11,9 @@ function fetchGreeting() {
         .catch(error => console.error('Error:', error));
 }
 
-// Fetch and display filtered rooms on form submit
+// Search rooms
 document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("searchForm"); // <-- updated form ID
+    const form = document.getElementById("searchForm");
 
     if (form) {
         form.addEventListener("submit", function (e) {
@@ -26,14 +24,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const stars = document.getElementById("stars").value;
             const view = document.getElementById("View").value.toLowerCase();
 
-            // Fetch all rooms from backend
             fetch("http://localhost:8080/api/rooms")
                 .then(response => {
                     if (!response.ok) throw new Error("Failed to fetch rooms");
                     return response.json();
                 })
                 .then(data => {
-                    // Filter rooms based on user input
                     const filtered = data.filter(room =>
                         (!location || room.hotelAddress.toLowerCase().includes(location)) &&
                         (!capacity || room.capacity.toLowerCase().includes(capacity)) &&
@@ -47,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-//  Function to fetch hotels (Example for another page)
+// Fetch hotels
 function fetchHotels() {
     fetch('http://localhost:8080/api/hotels/list')
         .then(response => response.json())
@@ -63,14 +59,14 @@ function fetchHotels() {
         .catch(error => console.error('Error:', error));
 }
 
-// Helper function to display room data in the DOM
+// Show rooms
 function displayRooms(rooms) {
     const roomList = document.getElementById("room-list");
-    roomList.innerHTML = ""; // Clear existing content
+    roomList.innerHTML = "";
 
     if (!rooms.length) {
         roomList.innerHTML = "<li>No rooms found.</li>";
-        return; 
+        return;
     }
 
     rooms.forEach(room => {
@@ -86,7 +82,7 @@ function displayRooms(rooms) {
     });
 }
 
-// Booking logic
+// Booking room
 function bookRoom(roomID) {
     const customerID = sessionStorage.getItem("customerID");
     const checkIn = document.getElementById("Check-in").value;
@@ -107,36 +103,44 @@ function bookRoom(roomID) {
             checkOutDate: checkOut
         })
     })
-    .then(response => {
-        if (response.ok) {
-            alert("Room booked successfully!");
-        } else {
-            alert("Booking failed.");
-        }
-    })
-    .catch(error => console.error("Error booking room:", error));
+        .then(response => {
+            if (response.ok) {
+                alert("Room booked successfully!");
+            } else {
+                alert("Booking failed.");
+            }
+        })
+        .catch(error => console.error("Error booking room:", error));
 }
 
-function loginCustomer() {
+// login function
+function login() {
+    const role = document.getElementById("role").value.toLowerCase();
     const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
-    fetch(`http://localhost:8080/api/customers/login?email=${encodeURIComponent(email)}`)
+    const loginUrl = `http://localhost:8080/api/auth/${role}Login`;
+
+    fetch(loginUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+    })
         .then(response => {
-            if (!response.ok) {
-                throw new Error("Login failed. Customer not found.");
-            }
+            if (!response.ok) return response.text().then(msg => { throw new Error(msg); });
             return response.json();
         })
-        .then(customer => {
-            sessionStorage.setItem("customerID", customer.customerID);
-            alert("Welcome, " + customer.fullName + "!");
-            window.location.href = "booking.html"; // Redirect to booking page
+        .then(data => {
+            const idKey = role === "employee" ? "employeeID" : "customerID";
+            sessionStorage.setItem(idKey, data[idKey]);
+            alert(`Welcome, ${data.name || data.fullName || "User"}!`);
+            window.location.href = role === "employee" ? "dashboard.html" : "booking.html";
         })
         .catch(error => {
-            console.error("Login error:", error);
-            alert("Invalid login. Please try again.");
+            alert("Login failed: " + error.message);
         });
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
     const protectedPages = ["booking.html", "mybooking.html", "dashboard.html"];
@@ -144,11 +148,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (protectedPages.includes(currentPage)) {
         const customerID = sessionStorage.getItem("customerID");
-        if (!customerID) {
+        const employeeID = sessionStorage.getItem("employeeID");
+        if (!customerID && !employeeID) {
             alert("You must log in first!");
-            window.location.href = "customer.html";
+            window.location.href = "login.html";
         }
     }
 });
-
-

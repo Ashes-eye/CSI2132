@@ -3,52 +3,91 @@ package com.example.e_hotel.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Hotel")
+@Table(name = "hotel")
 public class Hotel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int hotelID;
-    private String email;
-    private String phoneNumber;
-    private String address;
-    private int numberOfRooms;
-    private String rating;
+    @Column(name = "hotelid", nullable = false)
+    private Integer hotelId;
 
-    public int getHotelID() { 
-        return hotelID; 
+    @Column(name = "hotelchainid",nullable = false)
+    private Integer hotelChainId;
+
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(name ="phonenumber",nullable = false)
+    private String phoneNumber;
+
+    @Column(nullable = false)
+    private String address;
+
+    @Column(name ="numberofrooms",nullable = false)
+    private Integer numberOfRooms;
+
+    @Column(nullable = false)
+    private int rating; // from 1 to 5
+
+    // Constructors
+    public Hotel() {}
+
+    public Hotel(Integer hotelChainId, String email, String phoneNumber, String address, Integer numberOfRooms, int rating) {
+        this.hotelChainId = hotelChainId;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.numberOfRooms = numberOfRooms;
+        this.rating = rating;
     }
-    public void setHotelID(int hotelID) {
-        this.hotelID = hotelID; 
+
+    // Getters and Setters
+    public Integer getHotelId() {
+        return hotelId;
     }
+    public void setHotelId(Integer hotelId) {
+        this.hotelId = hotelId;
+    }
+
+    public Integer getHotelChainId() {
+        return hotelChainId;
+    }
+    public void setHotelChainId(Integer hotelChainId) {
+        this.hotelChainId = hotelChainId;
+    }
+
     public String getEmail() {
-        return email; 
+        return email;
     }
-    public void setEmail(String email) { 
-        this.email = email; 
+    public void setEmail(String email) {
+        this.email = email;
     }
-    public String getPhoneNumber() { 
-        return phoneNumber; 
+
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
-    public void setPhoneNumber(String phoneNumber) { 
-        this.phoneNumber = phoneNumber; 
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
-    public String getAddress() { 
-        return address; 
+
+    public String getAddress() {
+        return address;
     }
-    public void setAddress(String address) { 
-        this.address = address; 
+    public void setAddress(String address) {
+        this.address = address;
     }
-    public int getNumberOfRooms() { 
-        return numberOfRooms; 
+
+    public Integer getNumberOfRooms() {
+        return numberOfRooms;
     }
-    public void setNumberOfRooms(int numberOfRooms) { 
-        this.numberOfRooms = numberOfRooms; 
+    public void setNumberOfRooms(Integer numberOfRooms) {
+        this.numberOfRooms = numberOfRooms;
     }
-    public String getRating() { 
-        return rating; 
+
+    public int getRating() {
+        return rating;
     }
-    public void setRating(String rating) { 
-        this.rating = rating; 
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 }

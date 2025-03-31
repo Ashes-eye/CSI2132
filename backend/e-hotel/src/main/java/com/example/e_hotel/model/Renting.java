@@ -4,68 +4,80 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "Renting")
+@Table(name = "renting")
 public class Renting {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int rentingID;
+    @Column(name="rentid",nullable = false)
+    private Integer rentId;
 
-    private int customerID;
-    private int roomID;
-    private int employeeID;
-    private LocalDate checkInDate;
-    private LocalDate checkOutDate;
-    private double paymentAmount;
+    @Column(name ="customerid",nullable = false)
+    private Integer customerId;
 
-    private Integer bookingID;
+    @Column(name ="roomid",nullable = false)
+    private Integer roomId;
 
-    public int getRentingID() { 
-        return rentingID; 
+    @Column(name ="startdate",nullable = false)
+    private LocalDate startDate;
+
+    @Column(name ="enddate",nullable = false)
+    private LocalDate endDate;
+
+    @Column(nullable = false)
+    private Double payment;
+
+    // Constructors
+    public Renting() {}
+
+    public Renting(Integer customerId, Integer roomId, LocalDate startDate, LocalDate endDate, Double payment) {
+        this.customerId = customerId;
+        this.roomId = roomId;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.payment = payment;
     }
-    public void setRentingID(int rentingID) { 
-        this.rentingID = rentingID; 
+
+    // Getters and Setters
+    public Integer getRentId() {
+        return rentId;
     }
-    public int getCustomerID() { 
-        return customerID; 
+    public void setRentId(Integer rentId) {
+        this.rentId = rentId;
     }
-    public void setCustomerID(int customerID) { 
-        this.customerID = customerID; 
+
+    public Integer getCustomerId() {
+        return customerId;
     }
-    public int getRoomID() { 
-        return roomID; 
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
     }
-    public void setRoomID(int roomID) { 
-        this.roomID = roomID; 
+
+    public Integer getRoomId() {
+        return roomId;
     }
-    public int getEmployeeID() { 
-        return employeeID; 
+    public void setRoomId(Integer roomId) {
+        this.roomId = roomId;
     }
-    public void setEmployeeID(int employeeID) { 
-        this.employeeID = employeeID; 
+
+    public LocalDate getStartDate() {
+        return startDate;
     }
-    public LocalDate getCheckInDate() { 
-        return checkInDate; 
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
-    public void setCheckInDate(LocalDate checkInDate) { 
-        this.checkInDate = checkInDate; 
+
+    public LocalDate getEndDate() {
+        return endDate;
     }
-    public LocalDate getCheckOutDate() { 
-        return checkOutDate; 
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
-    public void setCheckOutDate(LocalDate checkOutDate) { 
-        this.checkOutDate = checkOutDate; 
+
+    public Double getPayment() {
+        return payment;
     }
-    public double getPaymentAmount() { 
-        return paymentAmount; 
-    }
-    public void setPaymentAmount(double paymentAmount) { 
-        this.paymentAmount = paymentAmount; 
-    }
-    public Integer getBookingID() {
-        return bookingID;
-    }
-    public void setBookingID(Integer bookingID) {
-        this.bookingID = bookingID;
+    public void setPayment(Double payment) {
+        this.payment = payment;
     }
 }

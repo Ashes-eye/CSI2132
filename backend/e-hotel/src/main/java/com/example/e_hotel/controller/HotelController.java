@@ -1,51 +1,62 @@
 package com.example.e_hotel.controller;
 
+import com.example.e_hotel.exceptions.ResourceNotFoundException;
 import com.example.e_hotel.model.Hotel;
 import com.example.e_hotel.repository.HotelRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/hotels")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/hotel")
+@CrossOrigin
 public class HotelController {
 
-    private final HotelRepository hotelRepository;
+    @Autowired
+    private HotelRepository hotelRepo;
 
-    public HotelController(HotelRepository hotelRepository) {
-        this.hotelRepository = hotelRepository;
-    }
-
-    // GET all hotels
     @GetMapping
     public List<Hotel> getAllHotels() {
-        return hotelRepository.findAll();
+        return hotelRepo.findAll();
     }
 
-    // GET a specific hotel by ID
     @GetMapping("/{id}")
-    public Optional<Hotel> getHotelById(@PathVariable int id) {
-        return hotelRepository.findById(id);
+    public ResponseEntity<Hotel> getHotelById(@PathVariable Integer id) {
+        Hotel h = hotelRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with ID " + id));
+        return ResponseEntity.ok(h);
     }
 
-    // POST a new hotel
     @PostMapping
-    public Hotel createHotel(@RequestBody Hotel hotel) {
-        return hotelRepository.save(hotel);
+    public ResponseEntity<Hotel> createHotel(@RequestBody Hotel newHotel) {
+        Hotel saved = hotelRepo.save(newHotel);
+        return ResponseEntity.ok(saved);
     }
 
-    // PUT to update a hotel
     @PutMapping("/{id}")
-    public Hotel updateHotel(@PathVariable int id, @RequestBody Hotel updatedHotel) {
-        updatedHotel.setHotelID(id);
-        return hotelRepository.save(updatedHotel);
+    public ResponseEntity<Hotel> updateHotel(@PathVariable Integer id, @RequestBody Hotel data) {
+        Hotel existing = hotelRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with ID " + id));
+
+        existing.setHotelChainId(data.getHotelChainId());
+        existing.setEmail(data.getEmail());
+        existing.setPhoneNumber(data.getPhoneNumber());
+        existing.setAddress(data.getAddress());
+        existing.setNumberOfRooms(data.getNumberOfRooms());
+        existing.setRating(data.getRating());
+
+        Hotel saved = hotelRepo.save(existing);
+        return ResponseEntity.ok(saved);
     }
 
-    // DELETE a hotel
     @DeleteMapping("/{id}")
-    public void deleteHotel(@PathVariable int id) {
-        hotelRepository.deleteById(id);
+    public ResponseEntity<?> deleteHotel(@PathVariable Integer id) {
+        if (!hotelRepo.existsById(id)) {
+            throw new ResourceNotFoundException("Hotel not found with ID " + id);
+        }
+        hotelRepo.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
