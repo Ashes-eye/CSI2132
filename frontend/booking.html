@@ -2,7 +2,6 @@
 <html>
 <head>
     <title>Room Booking</title>
-<<<<<<< HEAD
     <style>
         .nav-menu {
             background-color: #333;
@@ -40,10 +39,6 @@
     <a href="Login.html" id="logout-link">Logout</a>
 </div>
 
-=======
-</head>
-<body>
->>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
 <h1>Book a Room</h1>
 
 <div>
@@ -76,7 +71,6 @@
     let roomsData = [];
     let hotelsData = [];
 
-<<<<<<< HEAD
     document.addEventListener("DOMContentLoaded", () => {
         const customerID = sessionStorage.getItem("customerID");
         if (!customerID) {
@@ -85,24 +79,16 @@
             return;
         }
 
-        // Set up logout link
         document.getElementById("logout-link").addEventListener("click", function(e) {
             e.preventDefault();
-            logout();
+            sessionStorage.clear();
+            alert("You have been logged out.");
+            window.location.href = "Login.html";
         });
 
-        // Load rooms initially with no filters
         searchRooms();
     });
 
-    function logout() {
-        sessionStorage.clear();
-        alert("You have been logged out.");
-        window.location.href = "Login.html";
-    }
-
-=======
->>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
     async function searchRooms() {
         const capacityVal = parseInt(document.getElementById('capacityFilter').value) || 0;
         const viewVal = document.getElementById('viewFilter').value.toLowerCase().trim();
@@ -112,14 +98,8 @@
             const roomsRes = await fetch('http://localhost:8080/api/room');
             roomsData = await roomsRes.json();
 
-<<<<<<< HEAD
             const hotelsRes = await fetch('http://localhost:8080/api/hotel');
-=======
-            const hotelsRes = await fetch('http://localhost:8080/api/hotel'); // ⬆️ fixed path
->>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
             hotelsData = await hotelsRes.json();
-
-            if (!Array.isArray(hotelsData)) throw new Error("Hotel data format error");
 
             roomsData.forEach(r => {
                 const hotel = hotelsData.find(h => h.hotelId === r.hotelId);
@@ -128,39 +108,27 @@
                     r.hotelAddress = hotel.address;
                     r.hotelRating = hotel.rating;
                 }
-<<<<<<< HEAD
-                
-                // Create a view string based on the boolean properties
-                // Ensure only one view is assigned (sea takes precedence if both are true)
                 if (r.seaView) {
                     r.view = 'sea';
                 } else if (r.mountainView) {
                     r.view = 'mountain';
                 } else {
-                    r.view = 'city'; // Default if no special views
+                    r.view = 'city';
                 }
-=======
->>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
             });
 
             const filtered = roomsData.filter(r => {
-                const meetsCapacity = (r.capacity >= capacityVal);
-<<<<<<< HEAD
-                const meetsView = (viewVal === '' || r.view.toLowerCase().includes(viewVal));
-=======
-                const meetsView = (viewVal === '' || (r.view && r.view.toLowerCase().includes(viewVal)));
->>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
-                const meetsRating = (r.hotelRating >= ratingVal);
-                return meetsCapacity && meetsView && meetsRating;
+                return (
+                    r.capacity >= capacityVal &&
+                    (viewVal === '' || r.view.toLowerCase().includes(viewVal)) &&
+                    r.hotelRating >= ratingVal
+                );
             });
 
             displayRooms(filtered);
         } catch (err) {
             alert("Error fetching data: " + err.message);
-<<<<<<< HEAD
             console.error(err);
-=======
->>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
         }
     }
 
@@ -175,13 +143,7 @@
 
         list.forEach(r => {
             const div = document.createElement('div');
-<<<<<<< HEAD
             div.className = 'room-item';
-            div.style.border = '1px solid #ccc';
-            div.style.padding = '10px';
-            div.style.margin = '10px 0';
-            div.style.borderRadius = '5px';
-            
             div.innerHTML = `
                 <p>
                     <strong>Room #${r.roomId}</strong><br/>
@@ -190,23 +152,13 @@
                     ${r.amenities ? 'Amenities: ' + r.amenities : ''}
                 </p>
                 <button onclick="selectRoom(${r.roomId})">Select this Room</button>
-=======
-            div.innerHTML = `
-                <p>
-                    <strong>Room #${r.roomId}</strong><br/>
-                    Hotel: ${r.hotelName} (${r.hotelRating} star) - ${r.hotelAddress}<br/>
-                    Capacity: ${r.capacity}, View: ${r.view}, Price: $${r.price}
-                </p>
->>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
             `;
             container.appendChild(div);
         });
     }
 
-<<<<<<< HEAD
     function selectRoom(roomId) {
         document.getElementById('roomIdInput').value = roomId;
-        // Scroll to the booking form
         document.querySelector('div h3').scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -215,12 +167,6 @@
         if (!customerId) {
             alert('You must be logged in as a customer to book');
             window.location.href = 'Login.html';
-=======
-    async function bookRoom() {
-        const customerId = sessionStorage.getItem('customerID'); // ⬆️ fixed casing
-        if (!customerId) {
-            alert('You must be logged in as a customer to book');
->>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
             return;
         }
 
@@ -233,65 +179,37 @@
             return;
         }
 
-<<<<<<< HEAD
         if (new Date(startDate) >= new Date(endDate)) {
             alert('End date must be after start date');
             return;
         }
 
-=======
->>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
         const body = {
             customerId: parseInt(customerId),
             roomId: roomId,
             startDate: startDate,
-<<<<<<< HEAD
             endDate: endDate,
-            status: "PENDING" // Add status explicitly
+            status: "PENDING"
         };
 
-        console.log("Sending booking request:", body);
-
-=======
-            endDate: endDate
-        };
-
->>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
         try {
             const res = await fetch('http://localhost:8080/api/booking', {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body)
             });
-<<<<<<< HEAD
-            
-            console.log("Response status:", res.status);
-            
+
             if (res.ok) {
                 const booking = await res.json();
-                console.log("Booking created:", booking);
                 alert('Booking created! ID: ' + booking.bookingId);
-                // Clear inputs after successful booking
                 document.getElementById('roomIdInput').value = '';
                 document.getElementById('startDate').value = '';
                 document.getElementById('endDate').value = '';
             } else {
                 const msg = await res.text();
-                console.error("Booking failed with message:", msg);
                 alert('Booking failed: ' + msg);
             }
         } catch (err) {
-            console.error("Error in booking:", err);
-=======
-            if (res.ok) {
-                const booking = await res.json();
-                alert('Booking created! ID: ' + booking.bookingId);
-            } else {
-                const msg = await res.text();
-                alert('Booking failed: ' + msg);
-            }
-        } catch (err) {
->>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
             alert('Error: ' + err.message);
         }
     }

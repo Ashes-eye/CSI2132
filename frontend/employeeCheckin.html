@@ -1,0 +1,67 @@
+<!-- employeeCheckin.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Check-In Guests</title>
+</head>
+<body>
+<h1>Employee: Check-In Guests</h1>
+<div>
+    <label>Booking ID:</label>
+    <input type="number" id="bookingIdInput" />
+
+    <label>New Status:</label>
+    <select id="statusSelect">
+        <option value="BOOKED">BOOKED</option>
+        <option value="CANCELLED">CANCELLED</option>
+    </select>
+    <button onclick="checkInGuest()">Update Booking</button>
+</div>
+
+<div id="bookingList"></div>
+
+<script>
+    async function loadBookings() {
+        const res = await fetch('http://localhost:8080/api/booking');
+        const bookings = await res.json();
+
+        const div = document.getElementById('bookingList');
+        div.innerHTML = '<h3>Pending Bookings</h3>';
+
+        bookings.filter(b => b.status === 'PENDING').forEach(b => {
+            const p = document.createElement('p');
+            p.innerHTML = `Booking #${b.bookingId}: Customer ${b.customerId}, Room ${b.roomId}, From ${b.startDate} to ${b.endDate}`;
+            div.appendChild(p);
+        });
+    }
+
+    async function checkInGuest() {
+        const bookingId = document.getElementById('bookingIdInput').value;
+        const newStatus = document.getElementById('statusSelect').value;
+
+        try {
+            const res = await fetch(`http://localhost:8080/api/booking/${bookingId}`);
+            const booking = await res.json();
+            booking.status = newStatus;
+
+            const update = await fetch(`http://localhost:8080/api/booking/${bookingId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(booking)
+            });
+
+            if (update.ok) {
+                alert('Booking status updated!');
+                loadBookings();
+            } else {
+                alert('Failed to update.');
+            }
+        } catch (err) {
+            alert('Error: ' + err.message);
+        }
+    }
+
+    window.onload = loadBookings;
+</script>
+</body>
+</html>

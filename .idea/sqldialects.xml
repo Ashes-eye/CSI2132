@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
-<<<<<<< HEAD
-=======
-    <file url="file://$PROJECT_DIR$/database/InsertData.sql" dialect="PostgreSQL" />
->>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
-    <file url="PROJECT" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/database/CreateTables.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/database/Indexes.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/database/InsertData.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/database/Query1.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/database/Query2.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/database/Query3.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/database/Query4.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/database/Triggers.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/database/UpdateSchema.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/database/Views.sql" dialect="GenericSQL" />
   </component>
 </project>

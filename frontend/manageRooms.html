@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Rooms</title>
+    <style>
+        input, select, button {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+<h1>Manage Hotel Rooms</h1>
+
+<h3>Existing Rooms</h3>
+<div id="roomList"></div>
+
+<h3 id="formTitle">Add New Room</h3>
+<form id="roomForm">
+    <input type="hidden" id="roomId" />
+    <input type="number" id="hotelId" placeholder="Hotel ID" required />
+    <input type="number" id="price" placeholder="Price" required />
+    <input type="number" id="capacity" placeholder="Capacity" required />
+    <input type="text" id="amenities" placeholder="Amenities" />
+    <label><input type="checkbox" id="seaView" /> Sea View</label>
+    <label><input type="checkbox" id="mountainView" /> Mountain View</label>
+    <label><input type="checkbox" id="isExtendable" /> Extendable</label>
+    <input type="text" id="problems" placeholder="Problems (optional)" />
+    <button type="submit" id="submitButton">Add Room</button>
+</form>
+
+<script>
+    async function fetchRooms() {
+        const res = await fetch('http://localhost:8080/api/room');
+        const rooms = await res.json();
+        const container = document.getElementById('roomList');
+        container.innerHTML = '';
+
+        rooms.forEach(r => {
+            const div = document.createElement('div');
+            div.innerHTML = `
+                <p>
+                    <strong>Room #${r.roomId}</strong> |
+                    Hotel: ${r.hotelId} |
+                    $${r.price} |
+                    Capacity: ${r.capacity} |
+                    SeaView: ${r.seaView} |
+                    MountainView: ${r.mountainView} |
+                    Extendable: ${r.extendable} |
+                    Amenities: ${r.amenities || "None"} |
+                    Problems: ${r.problems || "None"}
+                    <br/>
+                    <button onclick='editRoom(${JSON.stringify(r).replace(/'/g, "&apos;")})'>Edit</button>
+                    <button onclick='deleteRoom(${r.roomId})'>Delete</button>
+                </p>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    async function deleteRoom(id) {
+        if (!confirm('Are you sure you want to delete this room?')) return;
+        await fetch(`http://localhost:8080/api/room/${id}`, { method: 'DELETE' });
+        fetchRooms();
+    }
+
+    function editRoom(room) {
+        document.getElementById('formTitle').textContent = 'Edit Room';
+        document.getElementById('submitButton').textContent = 'Update Room';
+
+        document.getElementById('roomId').value = room.roomId;
+        document.getElementById('hotelId').value = room.hotelId;
+        document.getElementById('price').value = room.price;
+        document.getElementById('capacity').value = room.capacity;
+        document.getElementById('amenities').value = room.amenities || '';
+        document.getElementById('seaView').checked = room.seaView;
+        document.getElementById('mountainView').checked = room.mountainView;
+        document.getElementById('isExtendable').checked = room.extendable;
+        document.getElementById('problems').value = room.problems || '';
+        document.getElementById('roomForm').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    document.getElementById('roomForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const roomId = document.getElementById('roomId').value;
+        const room = {
+            hotelId: parseInt(document.getElementById('hotelId').value),
+            price: parseFloat(document.getElementById('price').value),
+            capacity: parseInt(document.getElementById('capacity').value),
+            amenities: document.getElementById('amenities').value,
+            seaView: document.getElementById('seaView').checked,
+            mountainView: document.getElementById('mountainView').checked,
+            extendable: document.getElementById('isExtendable').checked,
+            problems: document.getElementById('problems').value
+        };
+
+        if (roomId) {
+            await fetch(`http://localhost:8080/api/room/${roomId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(room)
+            });
+        } else {
+            await fetch(`http://localhost:8080/api/room`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(room)
+            });
+        }
+
+        this.reset();
+        document.getElementById('formTitle').textContent = 'Add New Room';
+        document.getElementById('submitButton').textContent = 'Add Room';
+        fetchRooms();
+    });
+
+    window.onload = fetchRooms;
+</script>
+</body>
+</html>

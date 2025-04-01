@@ -1,153 +1,102 @@
 // Fetch greeting
-function fetchGreeting() {
-    fetch('http://localhost:8080/api/hotels/greeting')
-        .then(response => {
-            if (!response.ok) throw new Error("Network response was not ok");
-            return response.text();
-        })
-        .then(data => {
-            document.getElementById('response').innerText = data;
-        })
-        .catch(error => console.error('Error:', error));
-}
-
-// Search rooms
 document.addEventListener("DOMContentLoaded", () => {
+    fetchGreeting();
     const form = document.getElementById("searchForm");
-
     if (form) {
-        form.addEventListener("submit", function (e) {
-            e.preventDefault();
-
-            const location = document.getElementById("location").value.toLowerCase();
-            const capacity = document.getElementById("capacity").value.toLowerCase();
-            const stars = document.getElementById("stars").value;
-            const view = document.getElementById("View").value.toLowerCase();
-
-            fetch("http://localhost:8080/api/rooms")
-                .then(response => {
-                    if (!response.ok) throw new Error("Failed to fetch rooms");
-                    return response.json();
-                })
-                .then(data => {
-                    const filtered = data.filter(room =>
-                        (!location || room.hotelAddress.toLowerCase().includes(location)) &&
-                        (!capacity || room.capacity.toLowerCase().includes(capacity)) &&
-                        (!stars || room.hotelRating.includes(stars)) &&
-                        (!view || room.view.toLowerCase().includes(view))
-                    );
-                    displayRooms(filtered);
-                })
-                .catch(error => console.error("Error fetching rooms:", error));
-        });
+        form.addEventListener("submit", handleSearch);
     }
+    checkSessionProtection();
 });
 
-// Fetch hotels
+function fetchGreeting() {
+    fetch('http://localhost:8080/api/hotels/greeting')
+        .then(res => res.ok ? res.text() : Promise.reject("Network Error"))
+        .then(data => document.getElementById('response').innerText = data)
+        .catch(console.error);
+}
+
+function handleSearch(e) {
+    e.preventDefault();
+    const location = document.getElementById("location").value.toLowerCase();
+    const capacity = document.getElementById("capacity").value;
+    const stars = document.getElementById("stars").value;
+    const view = document.getElementById("View").value.toLowerCase();
+
+    fetch("http://localhost:8080/api/rooms")
+        .then(res => res.ok ? res.json() : Promise.reject("Failed to fetch rooms"))
+        .then(data => {
+            const filtered = data.filter(room =>
+                (!location || room.hotelAddress.toLowerCase().includes(location)) &&
+                (!capacity || room.capacity >= parseInt(capacity)) &&
+                (!stars || String(room.hotelRating) === stars) &&
+                (!view || room.view?.toLowerCase().includes(view))
+            );
+            displayRooms(filtered);
+        })
+        .catch(console.error);
+}
+
 function fetchHotels() {
     fetch('http://localhost:8080/api/hotels/list')
-        .then(response => response.json())
+        .then(res => res.json())
         .then(data => {
-            let list = document.getElementById('hotelList');
+            const list = document.getElementById('hotelList');
             list.innerHTML = '';
             data.forEach(hotel => {
-                let li = document.createElement('li');
+                const li = document.createElement('li');
                 li.textContent = hotel;
                 list.appendChild(li);
             });
         })
-        .catch(error => console.error('Error:', error));
+        .catch(console.error);
 }
 
-// Show rooms
 function displayRooms(rooms) {
     const roomList = document.getElementById("room-list");
-    roomList.innerHTML = "";
-
-    if (!rooms.length) {
-        roomList.innerHTML = "<li>No rooms found.</li>";
-        return;
-    }
+    roomList.innerHTML = rooms.length ? '' : "<li>No rooms found.</li>";
 
     rooms.forEach(room => {
         const li = document.createElement("li");
         li.innerHTML = `
-            Room ID: ${room.roomID}, Hotel ID: ${room.hotelID}, Price: $${room.price}, 
-            Capacity: ${room.capacity}, View: ${room.view}, 
+            Room ID: ${room.roomId}, Hotel ID: ${room.hotelId}, Price: $${room.price}, 
+            Capacity: ${room.capacity}, View: ${room.view || "N/A"}, 
             Extendable: ${room.extendable ? "Yes" : "No"}, 
             Damages: ${room.damages || "None"}
-            <br><button onclick="bookRoom(${room.roomID})">Book</button>
+            <br><button onclick="bookRoom(${room.roomId})">Book</button>
         `;
         roomList.appendChild(li);
     });
 }
 
-// Booking room
-function bookRoom(roomID) {
-    const customerID = sessionStorage.getItem("customerID");
+function bookRoom(roomId) {
+    const customerId = sessionStorage.getItem("customerID");
     const checkIn = document.getElementById("Check-in").value;
     const checkOut = document.getElementById("check-out").value;
 
-    if (!customerID) {
-        alert("Please log in first.");
-        return;
-    }
+    if (!customerId) return alert("Please log in first.");
 
-<<<<<<< HEAD
     fetch("http://localhost:8080/api/booking", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-            customerId: parseInt(customerID),
-            roomId: roomID,
+            customerId: parseInt(customerId),
+            roomId: roomId,
             startDate: checkIn,
             endDate: checkOut
-=======
-    fetch("http://localhost:8080/api/bookings", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            customerID,
-            roomID,
-            checkInDate: checkIn,
-            checkOutDate: checkOut
->>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
         })
     })
-        .then(response => {
-            if (response.ok) {
-<<<<<<< HEAD
-                return response.json().then(data => {
-                    alert("Room booked successfully! Booking ID: " + data.bookingId);
-                });
-            } else {
-                return response.text().then(text => {
-                    alert("Booking failed: " + text);
-                });
-=======
-                alert("Room booked successfully!");
-            } else {
-                alert("Booking failed.");
->>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
-            }
-        })
-        .catch(error => console.error("Error booking room:", error));
+        .then(res => res.ok ? res.json() : res.text().then(text => Promise.reject(text)))
+        .then(data => alert("Room booked successfully! Booking ID: " + data.bookingId))
+        .catch(err => alert("Booking failed: " + err));
 }
 
-// login function
 function login() {
     const role = document.getElementById("role").value.toLowerCase();
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
-<<<<<<< HEAD
-    if (!email || !password) {
-        alert("Please enter both email and password");
-        return;
-    }
+    if (!email || !password) return alert("Please enter both email and password");
 
-=======
->>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
     const loginUrl = `http://localhost:8080/api/auth/${role}Login`;
 
     fetch(loginUrl, {
@@ -155,37 +104,24 @@ function login() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
     })
-        .then(response => {
-            if (!response.ok) return response.text().then(msg => { throw new Error(msg); });
-            return response.json();
-        })
+        .then(res => res.ok ? res.json() : res.text().then(msg => Promise.reject(msg)))
         .then(data => {
-<<<<<<< HEAD
             if (role === "employee") {
                 sessionStorage.setItem("employeeID", data.employeeId);
                 sessionStorage.setItem("employeeName", data.fullName || data.name || "Employee");
-                sessionStorage.removeItem("customerID"); // Clear any customer session
+                sessionStorage.removeItem("customerID");
             } else {
                 sessionStorage.setItem("customerID", data.customerId);
                 sessionStorage.setItem("customerName", data.fullName || data.name || "Customer");
-                sessionStorage.removeItem("employeeID"); // Clear any employee session
+                sessionStorage.removeItem("employeeID");
             }
-            
             alert(`Welcome, ${data.fullName || data.name || "User"}!`);
-=======
-            const idKey = role === "employee" ? "employeeID" : "customerID";
-            sessionStorage.setItem(idKey, data[idKey]);
-            alert(`Welcome, ${data.name || data.fullName || "User"}!`);
->>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
             window.location.href = role === "employee" ? "dashboard.html" : "booking.html";
         })
-        .catch(error => {
-            alert("Login failed: " + error.message);
-        });
+        .catch(err => alert("Login failed: " + err));
 }
 
-
-document.addEventListener("DOMContentLoaded", () => {
+function checkSessionProtection() {
     const protectedPages = ["booking.html", "mybooking.html", "dashboard.html"];
     const currentPage = window.location.pathname.split("/").pop();
 
@@ -197,4 +133,4 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.href = "login.html";
         }
     }
-});
+}

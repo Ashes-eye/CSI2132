@@ -2,6 +2,9 @@ package com.example.e_hotel.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "room")
 public class Room {
@@ -114,4 +117,16 @@ public class Room {
     public void setProblems(String problems) {
         this.problems = problems;
     }
+
+    //Return views
+    @Transient
+    private String view;
+
+    public String getView() {
+        List<String> views = new ArrayList<>();
+        if (this.seaView) views.add("Sea");
+        if (this.mountainView) views.add("Mountain");
+        return views.isEmpty() ? "None" : String.join(", ", views);
+    }
+
 }
