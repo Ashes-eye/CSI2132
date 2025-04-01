@@ -36,12 +36,16 @@ public class BookingController {
 
     @PostMapping
     public ResponseEntity<?> createBooking(@RequestBody Booking booking) {
+<<<<<<< HEAD
         System.out.println("Received booking request: " + booking);
         
+=======
+>>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
         // Check if the room exists
         roomRepo.findById(booking.getRoomId())
                 .orElseThrow(() -> new ResourceNotFoundException("Room not found with ID " + booking.getRoomId()));
 
+<<<<<<< HEAD
         // Check if customer exists
         if (booking.getCustomerId() == null) {
             return ResponseEntity.badRequest().body("Customer ID is required!");
@@ -67,21 +71,36 @@ public class BookingController {
                 continue;
             }
             
+=======
+        LocalDate start = booking.getStartDate();
+        LocalDate end = booking.getEndDate();
+        List<Booking> existingBookings = bookingRepo.findByRoomId(booking.getRoomId());
+        for (Booking b : existingBookings) {
+>>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
             if (!(end.isBefore(b.getStartDate()) || start.isAfter(b.getEndDate()))) {
                 return ResponseEntity.badRequest().body("Room is already booked in that date range!");
             }
         }
 
+<<<<<<< HEAD
         // Set bookDate to current date if not provided
         if (booking.getBookDate() == null) {
             booking.setBookDate(LocalDate.now());
         }
 
         // Set default status if not provided
+=======
+        // Set bookDate to current date
+        booking.setBookDate(LocalDate.now());
+
+        // Set default status
+        //Not done
+>>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
         if (booking.getStatus() == null || booking.getStatus().isBlank()) {
             booking.setStatus("PENDING");
         }
 
+<<<<<<< HEAD
         try {
             Booking saved = bookingRepo.save(booking);
             System.out.println("Booking saved successfully: " + saved);
@@ -138,6 +157,26 @@ public class BookingController {
             e.printStackTrace();
             return ResponseEntity.badRequest().body("Error updating booking: " + e.getMessage());
         }
+=======
+        Booking saved = bookingRepo.save(booking);
+        return ResponseEntity.ok(saved);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Booking> updateBooking(@PathVariable Integer id, @RequestBody Booking data) {
+        Booking existing = bookingRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found with ID " + id));
+
+        existing.setCustomerId(data.getCustomerId());
+        existing.setRoomId(data.getRoomId());
+        existing.setStartDate(data.getStartDate());
+        existing.setEndDate(data.getEndDate());
+        existing.setStatus(data.getStatus());
+        existing.setBookDate(data.getBookDate()); // allow manual update, or you can disable this
+
+        Booking saved = bookingRepo.save(existing);
+        return ResponseEntity.ok(saved);
+>>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
     }
 
     @DeleteMapping("/{id}")

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 C:\Users\souhail\Downloads\CSI2132-main\backend\e-hotel\src\main\java\com\example\e_hotel\controller\AuthController.java
 C:\Users\souhail\Downloads\CSI2132-main\backend\e-hotel\src\main\java\com\example\e_hotel\controller\BookingController.java
 C:\Users\souhail\Downloads\CSI2132-main\backend\e-hotel\src\main\java\com\example\e_hotel\controller\CustomerController.java
@@ -20,3 +21,27 @@ C:\Users\souhail\Downloads\CSI2132-main\backend\e-hotel\src\main\java\com\exampl
 C:\Users\souhail\Downloads\CSI2132-main\backend\e-hotel\src\main\java\com\example\e_hotel\repository\HotelRepository.java
 C:\Users\souhail\Downloads\CSI2132-main\backend\e-hotel\src\main\java\com\example\e_hotel\repository\RentingRepository.java
 C:\Users\souhail\Downloads\CSI2132-main\backend\e-hotel\src\main\java\com\example\e_hotel\repository\RoomRepository.java
+=======
+D:\CSI 2132\backend\e-hotel\src\main\java\com\example\e_hotel\controller\AuthController.java
+D:\CSI 2132\backend\e-hotel\src\main\java\com\example\e_hotel\controller\BookingController.java
+D:\CSI 2132\backend\e-hotel\src\main\java\com\example\e_hotel\controller\CustomerController.java
+D:\CSI 2132\backend\e-hotel\src\main\java\com\example\e_hotel\controller\EmployeeController.java
+D:\CSI 2132\backend\e-hotel\src\main\java\com\example\e_hotel\controller\HotelController.java
+D:\CSI 2132\backend\e-hotel\src\main\java\com\example\e_hotel\controller\RentingController.java
+D:\CSI 2132\backend\e-hotel\src\main\java\com\example\e_hotel\controller\RoomController.java
+D:\CSI 2132\backend\e-hotel\src\main\java\com\example\e_hotel\dto\CheckInRequest.java
+D:\CSI 2132\backend\e-hotel\src\main\java\com\example\e_hotel\EHotelApplication.java
+D:\CSI 2132\backend\e-hotel\src\main\java\com\example\e_hotel\exceptions\ResourceNotFoundException.java
+D:\CSI 2132\backend\e-hotel\src\main\java\com\example\e_hotel\model\Booking.java
+D:\CSI 2132\backend\e-hotel\src\main\java\com\example\e_hotel\model\Customer.java
+D:\CSI 2132\backend\e-hotel\src\main\java\com\example\e_hotel\model\Employee.java
+D:\CSI 2132\backend\e-hotel\src\main\java\com\example\e_hotel\model\Hotel.java
+D:\CSI 2132\backend\e-hotel\src\main\java\com\example\e_hotel\model\Renting.java
+D:\CSI 2132\backend\e-hotel\src\main\java\com\example\e_hotel\model\Room.java
+D:\CSI 2132\backend\e-hotel\src\main\java\com\example\e_hotel\repository\BookingRepository.java
+D:\CSI 2132\backend\e-hotel\src\main\java\com\example\e_hotel\repository\CustomerRepository.java
+D:\CSI 2132\backend\e-hotel\src\main\java\com\example\e_hotel\repository\EmployeeRepository.java
+D:\CSI 2132\backend\e-hotel\src\main\java\com\example\e_hotel\repository\HotelRepository.java
+D:\CSI 2132\backend\e-hotel\src\main\java\com\example\e_hotel\repository\RentingRepository.java
+D:\CSI 2132\backend\e-hotel\src\main\java\com\example\e_hotel\repository\RoomRepository.java
+>>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572

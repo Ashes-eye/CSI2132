@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>My Bookings</title>
     <link rel="stylesheet" href="style.css">
+<<<<<<< HEAD
     <style>
         .nav-menu {
             background-color: #333;
@@ -27,11 +28,14 @@
             color: white;
         }
     </style>
+=======
+>>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const customerID = sessionStorage.getItem("customerID");
             if (!customerID) {
                 alert("You must log in first!");
+<<<<<<< HEAD
                 window.location.href = "Login.html";
                 return;
             }
@@ -68,6 +72,20 @@
                 });
         }
 
+=======
+                window.location.href = "customer.html";
+                return;
+            }
+
+            document.getElementById("customer-id").textContent = customerID;
+
+            fetch(`http://localhost:8080/api/bookings/customer/${customerID}`)
+                .then(response => response.json())
+                .then(data => displayBookings(data))
+                .catch(error => console.error("Error fetching bookings:", error));
+        });
+
+>>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
         function displayBookings(bookings) {
             const list = document.getElementById("booking-list");
             list.innerHTML = "";
@@ -79,6 +97,7 @@
 
             bookings.forEach(booking => {
                 const li = document.createElement("li");
+<<<<<<< HEAD
                 li.style.border = "1px solid #ccc";
                 li.style.padding = "15px";
                 li.style.margin = "10px 0";
@@ -92,11 +111,20 @@
                     Check-out: ${booking.endDate}<br>
                     Status: ${booking.status}<br>
                     <button onclick="cancelBooking(${booking.bookingId})">Cancel Booking</button>
+=======
+                li.innerHTML = `
+                    Booking ID: ${booking.bookingID}<br>
+                    Room ID: ${booking.roomID}<br>
+                    Check-in: ${booking.checkInDate}<br>
+                    Check-out: ${booking.checkOutDate}<br>
+                    <hr>
+>>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
                 `;
                 list.appendChild(li);
             });
         }
 
+<<<<<<< HEAD
         function cancelBooking(bookingId) {
             if (!confirm("Are you sure you want to cancel this booking?")) {
                 return;
@@ -154,10 +182,17 @@
             sessionStorage.clear();
             alert("You have been logged out.");
             window.location.href = "Login.html";
+=======
+        function logout() {
+            sessionStorage.clear();
+            alert("You have been logged out.");
+            window.location.href = "login.html";
+>>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
         }
     </script>
 </head>
 <body>
+<<<<<<< HEAD
     <div class="nav-menu">
         <a href="booking.html">Book a Room</a>
         <a class="active" href="myBooking.html">My Bookings</a>
@@ -166,10 +201,17 @@
 
     <h1>My Bookings</h1>
     <p>Welcome, <span id="customer-name">Customer</span> (ID: <span id="customer-id"></span>)</p>
+=======
+    <h1>My Bookings</h1>
+    <p>Logged in as Customer ID: <span id="customer-id"></span></p>
+>>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
 
     <ul id="booking-list"></ul>
 
     <button onclick="logout()">Logout</button>
+<<<<<<< HEAD
     <button onclick="window.location.href='booking.html'">Book Another Room</button>
+=======
+>>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
 </body>
 </html>

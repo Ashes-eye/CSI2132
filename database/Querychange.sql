@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /*ALTER TABLE employee
+=======
+ALTER TABLE employee
+>>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
     ADD COLUMN email VARCHAR(255);
 
 ALTER TABLE employee
@@ -19,6 +23,7 @@ UPDATE public.customer
 SET email = 'customer@email.com',
     password = 'password'
 WHERE customerid = 1;
+<<<<<<< HEAD
 */
 
 -- Drop the existing booking table
@@ -29,3 +34,5 @@ WHERE customerid = 1;
 
 
 
+=======
+>>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572

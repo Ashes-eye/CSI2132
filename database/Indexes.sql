@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /*-- It's a common case that we find all rooms for a given hotel
+=======
+-- It's a common case that we find all rooms for a given hotel
+>>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
 -- Improve speed for that
 CREATE INDEX idx_room_hotel ON room(hotelid);
 
@@ -8,4 +12,7 @@ CREATE INDEX idx_booking_room_dates ON booking(roomid, startdate, enddate);
 
 --Looking for hotel by geographical perspective is important and common.
 CREATE INDEX idx_hchain_address ON hotelchain(address);
+<<<<<<< HEAD
 */
+=======
+>>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572

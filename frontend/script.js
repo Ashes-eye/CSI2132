@@ -93,6 +93,7 @@ function bookRoom(roomID) {
         return;
     }
 
+<<<<<<< HEAD
     fetch("http://localhost:8080/api/booking", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -101,10 +102,21 @@ function bookRoom(roomID) {
             roomId: roomID,
             startDate: checkIn,
             endDate: checkOut
+=======
+    fetch("http://localhost:8080/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            customerID,
+            roomID,
+            checkInDate: checkIn,
+            checkOutDate: checkOut
+>>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
         })
     })
         .then(response => {
             if (response.ok) {
+<<<<<<< HEAD
                 return response.json().then(data => {
                     alert("Room booked successfully! Booking ID: " + data.bookingId);
                 });
@@ -112,6 +124,11 @@ function bookRoom(roomID) {
                 return response.text().then(text => {
                     alert("Booking failed: " + text);
                 });
+=======
+                alert("Room booked successfully!");
+            } else {
+                alert("Booking failed.");
+>>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
             }
         })
         .catch(error => console.error("Error booking room:", error));
@@ -123,11 +140,14 @@ function login() {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
+<<<<<<< HEAD
     if (!email || !password) {
         alert("Please enter both email and password");
         return;
     }
 
+=======
+>>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
     const loginUrl = `http://localhost:8080/api/auth/${role}Login`;
 
     fetch(loginUrl, {
@@ -140,6 +160,7 @@ function login() {
             return response.json();
         })
         .then(data => {
+<<<<<<< HEAD
             if (role === "employee") {
                 sessionStorage.setItem("employeeID", data.employeeId);
                 sessionStorage.setItem("employeeName", data.fullName || data.name || "Employee");
@@ -151,6 +172,11 @@ function login() {
             }
             
             alert(`Welcome, ${data.fullName || data.name || "User"}!`);
+=======
+            const idKey = role === "employee" ? "employeeID" : "customerID";
+            sessionStorage.setItem(idKey, data[idKey]);
+            alert(`Welcome, ${data.name || data.fullName || "User"}!`);
+>>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
             window.location.href = role === "employee" ? "dashboard.html" : "booking.html";
         })
         .catch(error => {

@@ -1,6 +1,10 @@
 -- Create Tables
 -- Hotel Chains
+<<<<<<< HEAD
 /*CREATE TABLE HotelChain(
+=======
+CREATE TABLE HotelChain(
+>>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
     HotelChainId  INT PRIMARY KEY,
     Address  VARCHAR(200) NOT NULL,
     NumberOfHotels INT DEFAULT 0,
@@ -103,7 +107,11 @@ CREATE TABLE Employee (
     );
 
 
+<<<<<<< HEAD
 */
+=======
+
+>>>>>>> c23b03cee851e4a31fbf205b0a87f362dada3572
 
 
 
