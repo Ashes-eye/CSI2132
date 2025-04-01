@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Room Capacity Per Hotel</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      fetch("http://localhost:8080/api/views/hotel-capacity")
+        .then(res => res.json())
+        .then(data => {
+          const table = document.getElementById("capacityTable");
+          data.forEach(row => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `<td>${row.hotelName}</td><td>${row.totalCapacity}</td>`;
+            table.appendChild(tr);
+          });
+        })
+        .catch(err => console.error("Error loading view:", err));
+    });
+  </script>
+</head>
+<body>
+  <h1>Total Room Capacity Per Hotel</h1>
+  <table border="1">
+    <thead>
+      <tr><th>Hotel Name</th><th>Total Capacity</th></tr>
+    </thead>
+    <tbody id="capacityTable"></tbody>
+  </table>
+</body>
+</html>

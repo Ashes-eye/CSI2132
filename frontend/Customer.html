@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+   <meta charset="UTF-8"> 
+   <title> CustomerLogin</title>
+   <link rel="icon" href="hotel.jpg" type="image/x-icon">
+   <link rel="stylesheet" href="LoginStyle.css" >
+   <script src="script.js"></script>
+
+</head>
+
+
+<body> 
+
+
+<h1>   Welcome, Customer</h1>
+
+
+<fieldset> 
+<legend>
+   Login
+</legend>
+<p>
+   <label for="email"> email   </label>
+   <input type="email"  id="email" placeholder="joe123@gmail.com" autocomplete="on" required>
+</p>
+<p>
+   <label for="password">Password</label>
+   <input type="password"  id="password" required>
+</p>
+</fieldset>
+<button onclick="loginCustomer()">Login</button>
+  <button onclick="fetchGreeting()">Get Greeting</button>
+
+  <p id="response"></p>
+
+  <button onclick="logout()">Logout</button>
+
+  <script>
+    function logout() {
+      sessionStorage.clear();
+      alert("You have been logged out.");
+      window.location.href = "login.html";
+    }
+  </script>
+    
+
+</body>
+
+
+</html>
